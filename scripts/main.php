@@ -79,7 +79,8 @@ EOF;
 function footer()
 {
 	echo <<<EOF
-<p>Footer</p>
+<p>Copyright © 2015 Ben Schattinger. Some rights reserved by the <a href="/license">license</a>.</p>
+<p><a href="/tos">Terms of Service</a> | <a href="/privacy">Privacy Policy</a></p>
 EOF;
 
 }
