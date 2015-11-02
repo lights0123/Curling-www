@@ -6,9 +6,6 @@ $(document).ready(function () {
 				var link = $(this);
 				var $url = $(this).attr("href") === "/" ? "/content/" : "/content/" + $(this).attr("href");
 				$.get($url, function (data) {
-					document.title = data.substring(0, data.indexOf('\n'));
-					$('#content').html(data.substr(data.indexOf('\n')));
-					check();
 					$('li').removeClass('active');
 					if (link.parent().prop('nodeName') === "LI") {
 						link.parent().addClass('active');
@@ -19,6 +16,9 @@ $(document).ready(function () {
 						}
 					}
 					history.pushState([link.attr('href'), $('.active').find('a').attr('href')], document.title, link.attr('href'));
+					document.title = data.substring(0, data.indexOf('\n'));
+					$('#content').html(data.substr(data.indexOf('\n')));
+					check();
 				}).fail(function (jqXHR) {
 					var $status = jqXHR.status;
 					var $codes = [];
