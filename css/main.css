@@ -381,3 +381,13 @@ svg .eventNumber {
 	height: 44px;
 	padding-top: 12px;
 }
+
+svg .eventNumberBorder {
+	width: 0;
+	height: 44px;
+	padding: 0;
+	position: absolute;
+	border-right: 1px solid rgb(153, 153, 153);
+	top: 0;
+	left: 29px;
+}

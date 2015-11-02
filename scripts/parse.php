@@ -54,9 +54,11 @@ echo "</pre>";
 
 				draw.rect(30, cellHeight * 2).fill('#EEE').move(xPos, current);
 
-				$(draw.foreignObject(30, cellHeight * 2).move(xPos, current)
-					.appendChild("div", {innerText: events[i][2].toString()}).node['childNodes'][0])
+				var eve = draw.foreignObject(30, cellHeight * 2).move(xPos, current);
+				$(eve.appendChild("div", {innerText: events[i][2].toString()}).node['childNodes'][0])
 					.addClass("EventNumber");
+				$(eve.appendChild("div").node['childNodes'][1])
+						.addClass("EventNumberBorder");
 
 				for (var j = 0; j < 2; j++) {
 
