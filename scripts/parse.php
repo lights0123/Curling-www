@@ -44,10 +44,12 @@ echo "</pre>";
 			var xPos = 0;
 			var oldEvent = events[0][2] - 1;
 			var maxCurrent = 0;
+			var timesreset=0;
 			for (var i = 0; i < events.length; i++) {
 				if (oldEvent + 1 != events[i][2]) {
-					current = 0;
+					current = Math.pow(3,(timesreset+1))*90;
 					xPos += 200;
+					timesreset++;
 				}
 
 				oldEvent = events[i][2];

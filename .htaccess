@@ -13,3 +13,11 @@ AddOutputFilterByType DEFLATE application/x-javascript
 <files *.html>
 SetOutputFilter DEFLATE
 </files>
+
+
+#RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !content/$
+RewriteRule ^(([^/]+/)*[^.]+)\??$ $1.php [L]
+RewriteEngine On
+RewriteRule ^(.*)$ scripts/getcontent.php?page=$1 [L,QSA]
