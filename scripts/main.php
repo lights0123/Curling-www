@@ -57,7 +57,7 @@ function menu($menu)
    <li$home><a href='/'><span>Home</span></a></li>
    <li$data><a href='/data'><span>View Data</span></a></li>
    <li$contact><a href='/contact'><span>Contact</span></a></li>
-   <li class='last'$about><a href='/about'><span>About</span></a></li>
+   <li$about><a href='/about'><span>About</span></a></li>
 EOF;
 	if (isset($SESSION['loggedin'])) {
 		echo <<<EOF
