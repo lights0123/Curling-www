@@ -23,57 +23,48 @@ EOF;
 	menu($menu);
 }
 
-function menu($menu)
+function menu($activeItem)
 {
-	$home = "";
-	$data = "";
-	$contact = "";
-	$about = "";
-	$signin = "";
-	$signup = "";
-	switch ($menu) {
-		case '/':
-			$home = " class=\"active\"";
-			break;
-		case 'data':
-			$data = " class=\"active\"";
-			break;
-		case 'contact':
-			$contact = " class=\"active\"";
-			break;
-		case 'about':
-			$about = " class=\"active\"";
-			break;
-		case 'login':
-			$signin = " class=\"active\"";
-			break;
-		case 'signup':
-			$signup = " class=\"active\"";
-			break;
+	$menu = array(
+		'/' => array('Home', null),
+		'/data' => array('View Data', null),
+		'/contact' => array('Contact', null),
+		'/about' => array('About', null)
+	);
+	if (isset($SESSION['loggedin'])) {
+		$menu['/signout'] = array('Sign Out', 'right');
+	} else {
+		$menu['/login'] = array('Login', 'right');
+		$menu['/signup'] = array('Sign Up', 'right');
 	}
+
 	echo <<<EOF
 <div id='menu'>
 <ul>
-   <li$home><a href='/'><span>Home</span></a></li>
-   <li$data><a href='/data'><span>View Data</span></a></li>
-   <li$contact><a href='/contact'><span>Contact</span></a></li>
-   <li$about><a href='/about'><span>About</span></a></li>
 EOF;
-	if (isset($SESSION['loggedin'])) {
+	foreach ($menu as $link => $data) {
+		$active = ($activeItem == "/" && $link == "/") || (trim($link, '/') == $activeItem);
+		$classes="";
+		if($data[1]!=null){
+			$classes=$data[1];
+		}
+		if($active){
+			if($data[1]){
+				$classes.=' ';
+			}
+			$classes .= "active";
+		}
+		if($classes!=""){
+			$classes=' class="'.$classes.'"';
+		}
 		echo <<<EOF
-<li class='right'><a href='/signout'><span>Sign Out</span></a></li>
-</ul>
-</div>
-EOF;
-	} else {
-		echo <<<EOF
-<li class='right'$signin><a href='/login'><span>Login</span></a></li>
-<li class='right'$signup><a href='/signup'><span>Sign Up</span></a></li>
-</ul>
-</div>
+<li$classes><a href='$link'><span>$data[0]</span></a></li>
 EOF;
 	}
-
+	echo <<<EOF
+</ul>
+</div>
+EOF;
 }
 
 function footer()
