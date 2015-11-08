@@ -7,12 +7,7 @@
 	src: local('Myriad Pro Regular'), url('/fonts/MYRIADPRO-REGULAR.woff') format('woff');
 }
 
-#menu {
-	padding: 0;
-	margin: 0;
-	border: 0;
-	width: auto;
-}
+/* Thanks to http://cssmenumaker.com for the code */
 
 #menu ul,
 #menu li {
@@ -81,7 +76,6 @@
 	text-decoration: none;
 }
 
-/* Custom CSS Styles */
 #menu {
 	background: #333333;
 	border-bottom: 4px solid #1b9bff;
@@ -175,16 +169,6 @@
 #menu ul li.has-sub > a:after {
 	content: '+';
 	margin-left: 5px;
-}
-
-#menu ul li.last ul {
-	left: auto;
-	right: 0;
-}
-
-#menu ul li.last ul ul {
-	left: auto;
-	right: 99.5%;
 }
 
 #menu a {
