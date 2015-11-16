@@ -10,5 +10,5 @@ function DBConnect($db=null){
 	return $conn;
 }
 function DBCheck($conn){
-	return !$conn->connect_error;
+	return $conn->connect_errno;
 }
