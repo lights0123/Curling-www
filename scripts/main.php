@@ -8,7 +8,8 @@ function page_create($title = "CSC Bonspiel App Webpage", $menu)
 <title>$title</title>
 <link rel='stylesheet' type='text/css' href='/css/main.css' />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script>if (typeof jQuery === 'undefined') {
+<script>
+if (typeof jQuery === 'undefined') {
   document.write(unescape('%3Cscript%20src%3D%22/js/jquery-2.1.4.min.js%22%3E%3C/script%3E'));
   }
 </script>
