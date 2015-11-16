@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ERROR);
 include('template.php');
 try {
 	if ($_GET['page'] == '') {
@@ -71,15 +72,13 @@ function getPage($page, $formatted = true)
 	} else {
 		if ($page && startsWith($page, "/var/www/html/customcontent")) {
 			if(!is_dir($page)) {
-				$finfo = finfo_open(FILEINFO_MIME_TYPE);
-				header('Content-type: ' . finfo_file($finfo, $page));
-				finfo_close($finfo);
+				header('Content-type: ' . getMimeType($page));
+				chdir(dirname($page));
 				include($page);
 			} else {
 				if(file_exists($page.'/index.php')){
-					$finfo = finfo_open(FILEINFO_MIME_TYPE);
-					header('Content-type: ' . finfo_file($finfo, $page.'/index.php'));
-					finfo_close($finfo);
+					header('Content-type: ' . getMimeType($page.'/index.php'));
+					chdir(dirname($page.'/index.php'));
 					include($page.'/index.php');
 				}else{
 					//TODO: add file viewer
@@ -90,6 +89,21 @@ function getPage($page, $formatted = true)
 			return false;
 		}
 	}
-
 	return true;
+}
+function getMimeType($page){
+	$finfo = finfo_open(FILEINFO_MIME_TYPE);
+	$mime = finfo_file($finfo, $page);
+	switch(end(explode('.',$page))){
+		case 'appcache':
+			$mime='text/cache-manifest';
+			break;
+		case 'php':
+			$mime='text/html';
+			break;
+		default:
+			break;
+	}
+	finfo_close($finfo);
+	return $mime;
 }
