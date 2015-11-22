@@ -6,7 +6,7 @@ $(document).ready(function () {
 				var link = $(this);
 				var url = $(this).attr("href") === "/" ? "/content/" : "/content/" + $(this).attr("href");
 				$.get(url, function (data) {
-					if(data.split(/\r\n|\r|\n/).length){
+					if(data.split(/\r\n|\r|\n/).length==1){
 						document.location=data;
 						return;
 					}
@@ -34,7 +34,7 @@ $(document).ready(function () {
 		if (event.state[0] != null) {
 			url = event.state[0] === "/" ? "content/" : "content/" + event.state[0];
 			$.get(url, function (data) {
-				if(data.split(/\r\n|\r|\n/).length){
+				if(data.split(/\r\n|\r|\n/).length==1){
 					document.location=data;
 					return;
 				}
