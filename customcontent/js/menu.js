@@ -6,6 +6,10 @@ $(document).ready(function () {
 				var link = $(this);
 				var $url = $(this).attr("href") === "/" ? "/content/" : "/content/" + $(this).attr("href");
 				$.get($url, function (data) {
+					if(data.split(/\r\n|\r|\n/).length){
+						document.location=data;
+						return;
+					}
 					$('li').removeClass('active');
 					if (link.parent().prop('nodeName') === "LI") {
 						link.parent().addClass('active');
@@ -30,6 +34,10 @@ $(document).ready(function () {
 		if (event.state[0] != null) {
 			$url = event.state[0] === "/" ? "content/" : "content/" + event.state[0];
 			$.get($url, function (data) {
+				if(data.split(/\r\n|\r|\n/).length){
+					document.location=data;
+					return;
+				}
 				document.title = data.substring(0, data.indexOf('\n'));
 				$('#content').html(data.substr(data.indexOf('\n')));
 				check();

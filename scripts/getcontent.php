@@ -2,6 +2,7 @@
 error_reporting(E_ERROR);
 include('template.php');
 try {
+	$_GET['rawpage']=$_GET['page'];
 	if ($_GET['page'] == '') {
 		$_GET['page'] = "index";
 	}
@@ -32,6 +33,10 @@ try {
 				}
 			}
 		}
+		chdir("../customcontent");
+		if (!getPage($_GET['page'], false, true)) {
+			getPage($_GET['page'] . ".php", false, true);
+		}
 		$_GET = $backup;
 	}
 	if (!getPage($_GET['page'])) {
@@ -51,7 +56,7 @@ try {
 }
 
 
-function getPage($page, $formatted = true)
+function getPage($page, $formatted = true, $redirect = false)
 {
 	$page = realpath($page);
 	if ($formatted) {
@@ -71,16 +76,33 @@ function getPage($page, $formatted = true)
 		}
 	} else {
 		if ($page && startsWith($page, "/var/www/html/customcontent")) {
-			if(!is_dir($page)) {
+			if (!is_dir($page)) {
+				if ($redirect) {
+					echo <<<EOL
+{$_GET['page']}
+EOL;
+					exit();
+				}
 				header('Content-type: ' . getMimeType($page));
 				chdir(dirname($page));
 				include($page);
+				exit();
 			} else {
-				if(file_exists($page.'/index.php')){
-					header('Content-type: ' . getMimeType($page.'/index.php'));
-					chdir(dirname($page.'/index.php'));
-					include($page.'/index.php');
-				}else{
+				if (file_exists($page . '/index.php')) {
+					if ($redirect) {
+						echo <<<EOL
+{$_GET['page']}
+EOL;
+						exit();
+					}
+					if(substr($_GET['rawpage'], strlen($_GET['rawpage']) - 1)!='/'){
+						location($_GET['rawpage'].'/');
+					}
+					header('Content-type: ' . getMimeType($page . '/index.php'));
+					chdir(dirname($page . '/index.php'));
+					include($page . '/index.php');
+					exit();
+				} else {
 					//TODO: add file viewer
 					return false;
 				}
@@ -91,19 +113,27 @@ function getPage($page, $formatted = true)
 	}
 	return true;
 }
-function getMimeType($page){
+
+function getMimeType($page)
+{
 	$finfo = finfo_open(FILEINFO_MIME_TYPE);
 	$mime = finfo_file($finfo, $page);
-	switch(end(explode('.',$page))){
+	switch (end(explode('.', $page))) {
 		case 'appcache':
-			$mime='text/cache-manifest';
+			$mime = 'text/cache-manifest';
 			break;
 		case 'php':
-			$mime='text/html';
+			$mime = 'text/html';
 			break;
 		default:
 			break;
 	}
 	finfo_close($finfo);
 	return $mime;
+}
+
+function location($loc)
+{
+	header("Location: " . $loc);
+	exit();
 }
