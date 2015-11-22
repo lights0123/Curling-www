@@ -19,27 +19,8 @@ $(document).ready(function () {
 					document.title = data.substring(0, data.indexOf('\n'));
 					$('#content').html(data.substr(data.indexOf('\n')));
 					check();
-				}).fail(function (jqXHR) {
-					var $status = jqXHR.status;
-					var $codes = [];
-					$codes[200] = ['404 Not Found', 'Uh oh! Your page was not found.'];
-					$codes[403] = ['403 Forbidden', 'For some reason, you are forbidden to view this content.'];
-					$codes[404] = ['404 Not Found', 'Uh oh! Your page was not found.'];
-					$codes[405] = ['405 Method Not Allowed', 'The method specified in the Request-Line is not allowed for the specified resource.'];
-					$codes[408] = ['408 Request Timeout', 'Your browser failed to sent a request in the time allowed by the server.'];
-					$codes[500] = ['500 Internal Server Error', 'The request was unsuccessful due to an unexpected condition encountered by the server.'];
-					$codes[502] = ['502 Bad Gateway', 'The server received an invalid response from the upstream server while trying to fulfill the request.'];
-					$codes[504] = ['504 Gateway Timeout', 'The upstream server failed to send a request in the time allowed by the server.'];
-					$codes[0] = [$status, 'An unknown error occurred.'];
-					if ($codes[$status] == null) {
-						$status = 0;
-					}
-					history.pushState([link.attr('href'), null], "Error", link.attr('href'));
-					$('li').removeClass('active');
-					$('#content').html("<div>\
-					<h1>" + $codes[$status][0] + "</h1>\
-					<p>" + $codes[$status][1] + "</p>\
-					</div>");
+				}).fail(function(jqXHR){
+					fail(jqXHR,link.attr('href'));
 				});
 				return false;
 			});
@@ -56,27 +37,8 @@ $(document).ready(function () {
 				if (event.state[1] != null) {
 					$('#menu').find('a[href="' + event.state[1] + '"]').parent().addClass('active');
 				}
-			}).fail(function (jqXHR) {
-				var $status = jqXHR.status;
-				var $codes = [];
-				$codes[200] = ['404 Not Found', 'Uh oh! Your page was not found.'];
-				$codes[403] = ['403 Forbidden', 'For some reason, you are forbidden to view this content.'];
-				$codes[404] = ['404 Not Found', 'Uh oh! Your page was not found.'];
-				$codes[405] = ['405 Method Not Allowed', 'The method specified in the Request-Line is not allowed for the specified resource.'];
-				$codes[408] = ['408 Request Timeout', 'Your browser failed to sent a request in the time allowed by the server.'];
-				$codes[500] = ['500 Internal Server Error', 'The request was unsuccessful due to an unexpected condition encountered by the server.'];
-				$codes[502] = ['502 Bad Gateway', 'The server received an invalid response from the upstream server while trying to fulfill the request.'];
-				$codes[504] = ['504 Gateway Timeout', 'The upstream server failed to send a request in the time allowed by the server.'];
-				$codes[0] = [$status, 'An unknown error occurred.'];
-				if ($codes[$status] == null) {
-					$status = 0;
-				}
-				history.replaceState([event.state[0], null], "Error", event.state[0]);
-				$('li').removeClass('active');
-				$('#content').html("<div>\
-					<h1>" + $codes[$status][0] + "</h1>\
-					<p>" + $codes[$status][1] + "</p>\
-					</div>");
+			}).fail(function(jqXHR){
+				fail(jqXHR,event.state[0]);
 			});
 		}
 	}
@@ -104,4 +66,26 @@ function check() {
 			});
 		}
 	});
+}
+function fail(jqXHR,url) {
+	var $status = jqXHR.status;
+	var $codes = [];
+	$codes[200] = ['404 Not Found', 'Uh oh! Your page was not found.'];
+	$codes[403] = ['403 Forbidden', 'For some reason, you are forbidden to view this content.'];
+	$codes[404] = ['404 Not Found', 'Uh oh! Your page was not found.'];
+	$codes[405] = ['405 Method Not Allowed', 'The method specified in the Request-Line is not allowed for the specified resource.'];
+	$codes[408] = ['408 Request Timeout', 'Your browser failed to sent a request in the time allowed by the server.'];
+	$codes[500] = ['500 Internal Server Error', 'The request was unsuccessful due to an unexpected condition encountered by the server.'];
+	$codes[502] = ['502 Bad Gateway', 'The server received an invalid response from the upstream server while trying to fulfill the request.'];
+	$codes[504] = ['504 Gateway Timeout', 'The upstream server failed to send a request in the time allowed by the server.'];
+	$codes[0] = [$status, 'An unknown error occurred.'];
+	if ($codes[$status] == null) {
+		$status = 0;
+	}
+	history.pushState([url, null], "Error", url);
+	$('li').removeClass('active');
+	$('#content').html("<div>\
+					<h1>" + $codes[$status][0] + "</h1>\
+					<p>" + $codes[$status][1] + "</p>\
+					</div>");
 }
