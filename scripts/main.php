@@ -82,3 +82,10 @@ function startsWith($haystack, $needle)
 	$length = strlen($needle);
 	return (substr($haystack, 0, $length) === $needle);
 }
+function getSelf(){
+	$file=explode('/',debug_backtrace()[0]['file']);
+	for($i=0;$i<=4;$i++){
+		unset($file[$i]);
+	}
+	return implode('/',$file);
+}
