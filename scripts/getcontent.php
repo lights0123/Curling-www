@@ -19,7 +19,7 @@ try {
 		$page = realpath($_GET['page']);
 		if ($page) {
 			$filename = end(explode('/', $page));
-			if (startsWith($page, "/var/www/html/content")) {
+			if (startsWith($page, DOCUMENT_ROOT."/content")) {
 				include($page);
 				exit();
 			}
@@ -27,7 +27,7 @@ try {
 			$page = realpath($_GET['page'] . ".php");
 			if ($page) {
 				$filename = end(explode('/', $page));
-				if (startsWith($page, "/var/www/html/content")) {
+				if (startsWith($page, DOCUMENT_ROOT."/content")) {
 					include($page);
 					exit();
 				}
@@ -45,14 +45,14 @@ try {
 			if (!getPage($_GET['page'], false)) {
 				if (!getPage($_GET['page'] . ".php", false)) {
 					http_response_code(404);
-					createPage('/var/www/html/content/error.php', 'error');
+					createPage(DOCUMENT_ROOT.'/content/error.php', 'error');
 				}
 			}
 		}
 	}
 } catch (Exception $e) {
 	http_response_code(404);
-	createPage('/var/www/html/content/error.php', 'error');
+	createPage(DOCUMENT_ROOT.'/content/error.php', 'error');
 }
 
 
@@ -62,7 +62,7 @@ function getPage($page, $formatted = true, $redirect = false)
 	if ($formatted) {
 		if ($page) {
 			$filename = end(explode('/', $page));
-			if (startsWith($page, "/var/www/html/content")) {
+			if (startsWith($page, DOCUMENT_ROOT."/content")) {
 				if (!is_dir($page)) {
 					createPage($page, $filename == 'index.php' ? '/' : explode('.', $filename)[0]);
 				} else {
@@ -75,7 +75,7 @@ function getPage($page, $formatted = true, $redirect = false)
 			return false;
 		}
 	} else {
-		if ($page && startsWith($page, "/var/www/html/customcontent")) {
+		if ($page && startsWith($page, DOCUMENT_ROOT."/customcontent")) {
 			if (!is_dir($page)) {
 				if ($redirect) {
 					echo <<<EOL
@@ -99,7 +99,7 @@ EOL;
 						location($_GET['rawpage'].'/');
 					}
 					header('Content-type: ' . getMimeType($page . '/index.php'));
-					chdir(dirname($page . '/index.php'));
+					chdir($page);
 					include($page . '/index.php');
 					exit();
 				} else {

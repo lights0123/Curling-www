@@ -1,5 +1,5 @@
 <?php
-$GLOBALS['data']=json_decode(file_get_contents("/var/www/db.json"),true);
+$GLOBALS['data']=json_decode(file_get_contents(SETTINGS_ROOT."/db.json"),true);
 function DBConnect($db=null){
 	$data=$GLOBALS['data'];
 	if($db!=null){

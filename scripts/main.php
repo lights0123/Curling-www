@@ -1,4 +1,5 @@
 <?php
+include('globals.php');
 session_start();
 function page_create($title = "CSC Bonspiel App Webpage", $menu)
 {
@@ -84,7 +85,12 @@ function startsWith($haystack, $needle)
 }
 function getSelf(){
 	$file=explode('/',debug_backtrace()[0]['file']);
-	for($i=0;$i<=4;$i++){
+	$content=array_search('content',$file);
+	if($content==false){
+		$content=array_search('customcontent',$file);
+	}
+	$index=$content;
+	for($i=0;$i<=$index;$i++){
 		unset($file[$i]);
 	}
 	return implode('/',$file);
