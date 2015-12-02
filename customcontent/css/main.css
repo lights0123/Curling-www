@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Oxygen+Mono);
+@import url(https://fonts.googleapis.com/css?family=Oxygen+Mono);
 
 @font-face {
 	font-family: 'Myriad Pro Regular';
@@ -346,6 +346,11 @@ small {
 	font-size: 11px;
 	color: lightgrey;
 }
+
+small a {
+	font-size: 11px;
+	color: #0BF;
+ }
 
 svg div {
 	font-family: Arial, 'Myriad Pro Regular', sans-serif;

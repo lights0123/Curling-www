@@ -1,9 +1,15 @@
 CSC Curling | Sign Up
+<?php
+if (isset($_POST['password'])) {
+	ob_end_clean();
+	exit();
+}
+?>
 <script src="/js/jquery.validate.min.js"></script>
 <div>
 	<p>Please enter your information below:</p>
 
-	<form id="signup_form" action="<?php echo $_SERVER['PHP_SELF']; ?>"
+	<form id="signup_form" action="<?php echo getSelf(); ?>"
 		  method="POST" enctype="multipart/form-data">
 		<fieldset>
 			<div>
@@ -21,8 +27,10 @@ CSC Curling | Sign Up
 		<br/>
 		<fieldset class="center">
 			<input type="submit" value="Sign Up"/>
-			<br />
-			<small>By signing up, you agree to the CSC Curling's Terms of Use and Privacy Policy.</small>
+			<br/>
+			<small>By signing up, you agree to the CSC Curling's <a href="/tos">Terms of Service</a> and <a
+					href="/privacy">Privacy Policy</a>.
+			</small>
 		</fieldset>
 	</form>
 	<script>
@@ -58,6 +66,13 @@ CSC Curling | Sign Up
 					required: "Please enter an email address",
 					maxlength: "Your email address must be less than 65 characters"
 				}
+			},
+			submitHandler: function (form) {
+				$.post($(form).attr('action'), $(form).serialize(), function (data, test, test2) {
+					console.log(data);
+					console.log(test);
+					console.log(test2);
+				});
 			}
 		});
 	</script>
