@@ -78,11 +78,32 @@ EOF;
 
 }
 
-function startsWith($haystack, $needle)
-{
-	$length = strlen($needle);
-	return (substr($haystack, 0, $length) === $needle);
+function startsWith($haystack, $needle) {
+	// search backwards starting from haystack length characters from the end
+	return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
 }
+
+function endsWith($haystack, $needle) {
+	// search forward starting from end minus needle length characters
+	return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
+}
+
+// $amount is the amount to read from either end, for example, with $amount being 5:
+// This is a test
+// ↑↑↑↑↑
+// Now, $amount being -5:
+// This is another test
+//                ↑↑↑↑↑
+function getChars($string, $amount){
+	if($amount < 0){
+		return substr($string, $amount);
+	}elseif($amount > 0){
+		return substr($string, 0, $amount);
+	}else{
+		return '';
+	}
+}
+
 function getSelf(){
 	$file=explode('/',debug_backtrace()[0]['file']);
 	$content=array_search('content',$file);
@@ -93,5 +114,7 @@ function getSelf(){
 	for($i=0;$i<=$index;$i++){
 		unset($file[$i]);
 	}
-	return implode('/',$file);
+	$file = implode('/',$file);
+	$file = endsWith($file,'.php') ? substr($file, 0, -4) : $file;
+	return $file;
 }
