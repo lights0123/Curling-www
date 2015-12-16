@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	history.replaceState([window.location.pathname, $('.active').find('a').attr('href')], document.title, window.location.pathname);
+	history.replaceState([window.location.pathname, $('.active').find('a').attr('href')], document.title, window.location.pathname + window.location.search);
 	$('a[href]').each(function () {
 		if ($(this).attr('href').substring(0, 4) !== "http") {
 			$(this).click(function () {
