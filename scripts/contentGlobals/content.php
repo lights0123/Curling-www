@@ -10,14 +10,14 @@ addHandler('content',function($opage,$rawpage) {
 	if ($page) {
 		if (startsWith($page, DOCUMENT_ROOT . "/content")) {
 			include($page);
-			exit();
+			exit;
 		}
 	} else {
 		$page = realpath($opage . ".php");
 		if ($page) {
 			if (startsWith($page, DOCUMENT_ROOT . "/content")) {
 				include($page);
-				exit();
+				exit;
 			}
 		}
 	}

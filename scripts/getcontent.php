@@ -39,5 +39,5 @@ try {
 function location($loc)
 {
 	header("Location: " . $loc);
-	exit();
+	exit;
 }

@@ -10,7 +10,7 @@ if (!function_exists('getPage')) {
 			if (startsWith($page, DOCUMENT_ROOT . "/content")) {
 				if (!is_dir($page)) {
 					createPage($page, $filename == 'index.php' ? '/' : explode('.', $filename)[0]);
-					exit();
+					exit;
 				}
 			}
 			return false;
@@ -33,7 +33,7 @@ if (!function_exists('getPage')) {
 					if (file_exists($page . '/index.php')) {
 						if ($redirect) {
 							echo getSelf($page);
-							exit();
+							exit;
 						}
 						if (substr($_GET['rawpage'], -1) != '/') {
 							location($_GET['rawpage'] . '/');
@@ -129,7 +129,7 @@ if (!function_exists('Download')) {
 				header('Cache-Control: public, no-cache');
 				/** @noinspection PhpWrongStringConcatenationInspection */
 				header('Content-Length: ' . sprintf('%u', $range[1] - $range[0] + 1));
-				if(startsWith(getMimeType($path),'video')){
+				if (startsWith(getMimeType($path), 'video')) {
 					header('Content-Disposition: attachment; filename="' . basename($path) . '"');
 				}
 				//header('Content-Transfer-Encoding: binary');
@@ -146,7 +146,7 @@ if (!function_exists('Download')) {
 				fclose($file);
 			}
 
-			exit();
+			exit;
 		} else {
 			header(sprintf('%s %03u %s', 'HTTP/1.1', 404, 'Not Found'), true, 404);
 		}
