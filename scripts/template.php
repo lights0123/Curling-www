@@ -3,7 +3,7 @@ require_once("main.php");
 function createPage($path, $menu = null)
 {
 	ob_start();
-	chdir($path);
+	chdir(dirname($path));
 	include($path);
 	$content = ob_get_contents();
 	ob_end_clean();
