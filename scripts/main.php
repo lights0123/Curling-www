@@ -3,25 +3,37 @@ include('globals.php');
 session_start();
 function page_create($title = "CSC Bonspiel App Webpage", $menu)
 {
-	echo <<<EOF
-<html>
-<head>
-<title>$title</title>
-<link rel='stylesheet' type='text/css' href='/css/main.css' />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script>
-if (typeof jQuery === 'undefined') {
-  document.write(unescape('%3Cscript%20src%3D%22/js/jquery-2.1.4.min.js%22%3E%3C/script%3E'));
-  }
-</script>
-<!--[if lt IE 9]>
-<META http-equiv="refresh" content="0;URL=unsupported">
-<body>
-<![endif]-->
-<script src="/js/menu.js"></script>
-</head>
-<div id="container">
-EOF;
+	?>
+	<html>
+	<head>
+		<title><?php echo $title ?></title>
+		<link rel='stylesheet' type='text/css' href='/css/main.css'/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<?php
+		if(USES_HTTPS) {
+			?>
+			<script>
+				if ('serviceWorker' in navigator) {
+					navigator.serviceWorker.register('/sw.js', {scope: '/'}).then(function (reg) {
+						// registration worked
+						console.log('Registration succeeded. Scope is ' + reg.scope);
+					}).catch(function (error) {
+						// registration failed
+						console.log('Registration failed with ' + error);
+					});
+				}
+			</script>
+			<?php
+		}
+		?>
+		<!--[if lt IE 9]>
+		<META http-equiv="refresh" content="0;URL=unsupported">
+		<body>
+		<![endif]-->
+		<script src="/js/menu.js"></script>
+	</head>
+	<div id="container">
+	<?php
 	menu($menu);
 }
 
@@ -46,18 +58,18 @@ function menu($activeItem)
 EOF;
 	foreach ($menu as $link => $data) {
 		$active = ($activeItem == "/" && $link == "/") || (trim($link, '/') == $activeItem);
-		$classes="";
-		if($data[1]!=null){
-			$classes=$data[1];
+		$classes = "";
+		if ($data[1] != null) {
+			$classes = $data[1];
 		}
-		if($active){
-			if($data[1]){
-				$classes.=' ';
+		if ($active) {
+			if ($data[1]) {
+				$classes .= ' ';
 			}
 			$classes .= "active";
 		}
-		if($classes!=""){
-			$classes=' class="'.$classes.'"';
+		if ($classes != "") {
+			$classes = ' class="' . $classes . '"';
 		}
 		echo <<<EOF
 <li$classes><a href='$link'><span>$data[0]</span></a></li>
@@ -78,12 +90,14 @@ EOF;
 
 }
 
-function startsWith($haystack, $needle) {
+function startsWith($haystack, $needle)
+{
 	// search backwards starting from haystack length characters from the end
 	return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
 }
 
-function endsWith($haystack, $needle) {
+function endsWith($haystack, $needle)
+{
 	// search forward starting from end minus needle length characters
 	return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
 }
@@ -94,27 +108,33 @@ function endsWith($haystack, $needle) {
 // Now, $amount being -5:
 // This is another test
 //                ↑↑↑↑↑
-function getChars($string, $amount){
-	if($amount < 0){
+function getChars($string, $amount)
+{
+	if ($amount < 0) {
 		return substr($string, $amount);
-	}elseif($amount > 0){
+	} elseif ($amount > 0) {
 		return substr($string, 0, $amount);
-	}else{
+	} else {
 		return '';
 	}
 }
 
-function getSelf(){
-	$file=explode('/',debug_backtrace()[0]['file']);
-	$content=array_search('content',$file);
-	if($content==false){
-		$content=array_search('customcontent',$file);
+function getSelf($file = null)
+{
+	if ($file === null) {
+		$file = explode('/', debug_backtrace()[0]['file']);
+	} else {
+		$file = explode('/', $file);
 	}
-	$index=$content;
-	for($i=0;$i<=$index;$i++){
+	$content = array_search('content', $file);
+	if ($content == false) {
+		$content = array_search('customcontent', $file);
+	}
+	$index = $content;
+	for ($i = 0; $i <= $index; $i++) {
 		unset($file[$i]);
 	}
-	$file = implode('/',$file);
-	$file = endsWith($file,'.php') ? substr($file, 0, -4) : $file;
+	$file = implode('/', $file);
+	$file = endsWith($file, '.php') ? substr($file, 0, -4) : $file;
 	return $file;
 }

@@ -1,7 +1,7 @@
 CSC Curling
 <div>
 	<p>This is a website WAFFLES</p>
-	<a href="contact">Clicky</a>
+	<a href="/contact">Clicky</a>
 	<br/>
 	<br/>
 	<br/>
