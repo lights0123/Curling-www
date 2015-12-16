@@ -32,7 +32,7 @@ $(document).ready(function () {
 	});
 	window.onpopstate = function (event) {
 		if (event.state[0] != null) {
-			url = event.state[0] === "/" ? "content/" : "content/" + event.state[0];
+			var url = event.state[0] === "/" ? "content/" : "content/" + event.state[0];
 			$.get(url, function (data) {
 				if(data.split(/\r\n|\r|\n/).length==1){
 					document.location=data;

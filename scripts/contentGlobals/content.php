@@ -20,6 +20,8 @@ addHandler('content',function($opage,$rawpage) {
 				exit();
 			}
 		}
-		echo getcwd() . '/' . $opage . ".php";
 	}
+	chdir("../customcontent");
+	getPage($opage, false, true);
+	getPage($opage . ".php", false, true);
 });
