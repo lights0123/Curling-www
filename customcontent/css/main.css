@@ -226,9 +226,8 @@
 }
 
 .errorbox {
-	background-color: #F2DEDE;
-	border-color: #EBCCD1;
-	color: #A94442;
+	background: #fad7d4;
+	border-color: #f08a81 !important;
 }
 
 .warningbox {
@@ -250,10 +249,12 @@
 }
 
 .notice {
-	padding: 15px;
+	border-left: 5px solid;
+	padding: 10px 10px 10px 30px;
 	margin-bottom: 20px;
-	border: 1px solid transparent;
-	border-radius: 4px;
+	overflow: hidden;
+	clear: both;
+	font-size: 12px;
 }
 
 body {
@@ -294,8 +295,8 @@ body {
 	text-align: center;
 }
 
-#footer p{
-	margin:0;
+#footer p {
+	margin: 0;
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -354,20 +355,20 @@ small {
 
 small a {
 	font-size: 11px;
-	color: #0BF;
- }
+	color: #82C1DC;
+}
 
 svg div {
 	font-family: Arial, 'Myriad Pro Regular', sans-serif;
 	font-size: 14px;
 	padding: 3px;
-	width: 64px;
+	width: 134px;
 	height: 22px;
 	overflow: hidden;
 }
 
 svg .borderTeam {
-	width: 70px;
+	width: 140px;
 	height: 0;
 	padding: 0;
 	position: absolute;
@@ -389,4 +390,42 @@ svg .eventNumberBorder {
 	border-right: 1px solid rgb(153, 153, 153);
 	top: 0;
 	left: 29px;
+}
+
+.tabs {
+	width: 100%;
+	display: inline-block;
+}
+
+.tab-links:after {
+	display: block;
+	clear: both;
+	content: '';
+}
+
+.tab-links li {
+	margin: 0px 5px;
+	float: left;
+	list-style: none;
+}
+
+.tab-links a {
+	padding: 9px 15px;
+	display: inline-block;
+	border-radius: 3px 3px 0px 0px;
+	background: #7FB5DA;
+	font-size: 16px;
+	font-weight: 600;
+	color: #4c4c4c;
+	transition: all linear 0.15s;
+}
+
+.tab-links a:hover {
+	background: #a7cce5;
+	text-decoration: none;
+}
+
+li.active a, li.active a:hover {
+	background: #fff;
+	color: #4c4c4c;
 }

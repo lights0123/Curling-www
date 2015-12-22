@@ -18,21 +18,14 @@ this.addEventListener('fetch', function (event) {
 		caches.open(cacheName).then(function (cacheS) {
 			return cacheS.match(event.request).then(function (response) {
 				if (response !== undefined) {
-					console.log('cached - static');
 					return response;
 				}
 				return caches.open(cacheNameNonStatic).then(function (cache) {
 					return fetch(event.request).then(function (response) {
-						console.log('network');
-						response.clone().text().then(function(text){
-							console.log(text);
-						});
 						var t = response.clone();
-						console.log('network2');
 						cache.put(event.request, t);
 						return response;
 					}, function () {
-						console.log('offline');
 						return cache.match(event.request).then(function (response) {
 							if (response == undefined) {
 								throw new Error();

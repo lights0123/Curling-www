@@ -15,7 +15,9 @@ while ($go) {
 	if ($cell == null) {
 		$go = false;
 	} else {
-		$events[count($events)] = Array(getCell("A" . $i, $file), getCell("B" . $i, $file), $cell);
+		$events[$cell] = ["team1" => getCell("A" . $i, $file),
+			"team2" => getCell("B" . $i, $file),
+			"winner" => getCell("H" . $i, $file)];
 		if (!in_array(getCell("A" . $i, $file), $teams)) {
 			$teams[count($teams)] = getCell("A" . $i, $file);
 		}
@@ -26,6 +28,16 @@ while ($go) {
 	$i++;
 }
 ?>
+	<div class="tabs">
+		<ul class="tab-links">
+			<li class="active"><a class="autoexempt" href="#tab1">First Event</a></li>
+			<li><a class="autoexempt" href="#tab2">Second Event</a></li>
+			<li><a class="autoexempt" href="#tab3">Third Event</a></li>
+			<li><a class="autoexempt" href="#tab4">Fourth Event</a></li>
+			<li><a class="autoexempt" href="#tab4">Fifth Event</a></li>
+		</ul>
+	</div>
+	<h1>First Event</h1>
 	<div id="drawing"></div>
 	<script>
 		var events = <?php echo json_encode($events) ?>;
@@ -33,90 +45,74 @@ while ($go) {
 	</script>
 	<script>
 		var text;
-		var cellWidth = 70;
+		var cellWidth = 140;
 		var cellHeight = 22;
+		console.log(events);
 		$(document).ready(function () {
-			var draw = SVG('drawing').size(800, 800);
+			var draw = SVG('drawing').size(970, 800);
 			var current = 0;
 			var xPos = 0;
-			var oldEvent = events[0][2] - 1;
+			var oldEvent = Math.min.apply(Math, Object.keys(events)) - 1;
 			var maxCurrent = 0;
-			var timesreset=0;
-			for (var i = 0; i < events.length; i++) {
-				if (oldEvent + 1 != events[i][2]) {
-					current = Math.pow(3,(timesreset+1))*90;
+			var timesreset = 0;
+			Object.keys(events).forEach(function (value, key) {
+				key = parseInt(value);
+				value = events[value];
+				if (oldEvent + 1 != key) {
+					current = 18 * (Math.pow(2, timesreset + 2) - 2);
 					xPos += 200;
 					timesreset++;
 				}
+				if (key == 151) {
+					var cbak = current;
+					var xbak = xPos;
+					current = 1080;
+					xPos -= 200;
+				}
+				if ((value['team1']).toLowerCase() !== "bye") {
+					oldEvent = key;
+					draw.rect(30, cellHeight * 2).fill('#EEE').move(xPos, current);
 
-				oldEvent = events[i][2];
-
-				draw.rect(30, cellHeight * 2).fill('#EEE').move(xPos, current);
-
-				var eve = draw.foreignObject(30, cellHeight * 2).move(xPos, current);
-				$(eve.appendChild("div", {innerText: events[i][2].toString()}).node['childNodes'][0])
-					.addClass("EventNumber");
-				$(eve.appendChild("div").node['childNodes'][1])
+					var eve = draw.foreignObject(30, cellHeight * 2).move(xPos, current);
+					var child = eve.appendChild("a", {});
+					$(child.node['childNodes'][0]).append($("<div>")).children().text(key.toString()).addClass("EventNumber");
+					$(eve.appendChild("div").node['childNodes'][1])
 						.addClass("EventNumberBorder");
 
-				for (var j = 0; j < 2; j++) {
-
-					draw.rect(cellWidth, cellHeight).fill('#EEE').move(xPos + 30, current);
-
-					var fobj = draw.foreignObject(cellWidth, cellHeight + 1).move(xPos + 30, current).
-					appendChild("div", {innerText: events[i][j]});
-
-					if ((i * 2 + j) % 2 == 0) {
-						$(fobj.appendChild('div').node['childNodes'][1]).addClass("borderTeam")
-					}
-
-					current += (i * 2 + j) % 2 == 1 ? 50 : cellHeight;
-
-					if (current > maxCurrent) {
-						maxCurrent = current;
-					}
-
 				}
-			}
+				for (var j = 1; j < 3; j++) {
+					if ((value['team1']).toLowerCase() !== "bye") {
+						var color = '#EEE';
+						if (value['team' + (j.toString())] == value['winner'] && (key == 151 || key == 161)) {
+							color = '#da0';
+						}
+						draw.rect(cellWidth, cellHeight).fill(color).move(xPos + 30, current);
+
+						var fobj = draw.foreignObject(cellWidth, cellHeight + 1).move(xPos + 30, current).
+						appendChild("a", {});
+						$(fobj.node['childNodes'][0]).append($('<div>')).children().text(value['team' + (j.toString())]);
+						if ((key * 2 + (j - 1)) % 2 == 0) {
+							$(fobj.appendChild('div').node['childNodes'][1]).addClass("borderTeam")
+						}
+					}
+					current += (key * 2 + (j - 1)) % 2 == 1 ? (9 * Math.pow(2, timesreset + 3) - 22) : cellHeight;
+					if (current > maxCurrent && (key * 2 + (j - 1)) % 2 == 0) {
+						maxCurrent = current + 22;
+					}
+				}
+				if (key == 151) {
+					current = cbak;
+					xPos = xbak - 200;
+					if (current > maxCurrent && (key * 2 + (j - 1)) % 2 == 0) {
+						maxCurrent = current + 22;
+					}
+					timesreset--;
+				}
+			});
 			$('#drawing>svg').attr("height", maxCurrent);
 		});
 	</script>
 <?php
-echo <<<EOF
-<div id="brackets"></div>
-<script>
-var bigData = {
-  teams : [
-    ["ThisIsAVeryLongName",  "Team 2" ],
-    ["Team 3",  "Team 4" ],
-    ["Team 5",  "Team 6" ],
-    ["Team 7",  "Team 8" ],
-    ["Team 9",  "Team 10"],
-    ["Team 11", "Team 12"],
-    ["Team 13", "Team 14"],
-    ["Team 15", "Team 16"]
-  ],
-  results : [[ /* WINNER BRACKET */
-    [[7,5], [2,4], [6,3], [2,3], [1,5], [5,3], [7,2], [1,2]],
-    [[1,2], [3,4], [5,6], [7,8]],
-    [[9,1], [8,2]],
-    [[1,3]]
-  ], [         /* LOSER BRACKET */
-    [[5,1], [1,2], [3,2], [6,9]],
-    [[8,2], [1,2], [6,2], [1,3]],
-    [[1,2], [3,1]],
-    [[3,0], [1,9]],
-    [[3,2]],
-    [[4,2]]
-  ], [         /* FINALS */
-    [[3,8], [1,2]],
-    [[null,null]]
-  ]]
-}
-
-$(function() { $('div #brackets').bracket({init: bigData}) })
-</script>
-EOF;
 function getCell($pCoordinate = 'A1', $file)
 {
 	if (!($file instanceof PHPExcel)) {

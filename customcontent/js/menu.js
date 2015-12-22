@@ -52,7 +52,7 @@ $(document).ready(function () {
 	}
 });
 function check() {
-	$('#content').find('a[href]').each(function () {
+	$('#content').find('a[href]').not('.autoexempt').each(function () {
 		if ($(this).attr('href').substring(0, 4) !== "http") {
 			$(this).click(function () {
 				var link = $(this);

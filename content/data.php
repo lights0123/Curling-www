@@ -17,7 +17,6 @@ CSC Curling | View Data
 			}
 		}
 		[
-			'/js/jquery.bracket.min.js',
 			'/js/svg.js'
 		].forEach(function (src) {
 			var content=$("#content");

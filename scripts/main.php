@@ -1,6 +1,10 @@
 <?php
 include('globals.php');
+include('dbconnect.php');
+$conn=DBConnect('CurlingCSC');
 session_start();
+$auth = isset($_SESSION['auth']) ? $_SESSION['auth'] : -1;
+$uid = isset($_SESSION['uid']) ? $_SESSION['uid'] : -1;
 function page_create($title = "CSC Bonspiel App Webpage", $menu)
 {
 	?>
@@ -16,10 +20,10 @@ function page_create($title = "CSC Bonspiel App Webpage", $menu)
 				if ('serviceWorker' in navigator) {
 					navigator.serviceWorker.register('/sw.js', {scope: '/'}).then(function (reg) {
 						// registration worked
-						console.log('Registration succeeded. Scope is ' + reg.scope);
+						//console.log('Registration succeeded. Scope is ' + reg.scope);
 					}).catch(function (error) {
 						// registration failed
-						console.log('Registration failed with ' + error);
+						//console.log('Registration failed with ' + error);
 					});
 				}
 			</script>
@@ -45,8 +49,10 @@ function menu($activeItem)
 		'/contact' => array('Contact', null),
 		'/about' => array('About', null)
 	);
-	if (isset($SESSION['loggedin'])) {
+	global $auth;
+	if ($auth>-1) {
 		$menu['/signout'] = array('Sign Out', 'right');
+		$menu['/settings'] = array('Settings', 'right');
 	} else {
 		$menu['/login'] = array('Login', 'right');
 		$menu['/signup'] = array('Sign Up', 'right');
@@ -137,4 +143,12 @@ function getSelf($file = null)
 	$file = implode('/', $file);
 	$file = endsWith($file, '.php') ? substr($file, 0, -4) : $file;
 	return $file;
+}
+function createBox($type,$message){
+	switch($type){
+		case BOX_CREATE_ERROR:
+			?>
+	<div class="notice errorbox"><p><?php echo htmlspecialchars($message)?></p></div>
+		<?php
+	}
 }
