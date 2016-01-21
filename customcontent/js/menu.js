@@ -1,13 +1,37 @@
 $(document).ready(function () {
-	history.replaceState([window.location.pathname, $('.active').find('a').attr('href')], document.title, window.location.pathname + window.location.search);
-	$('a[href]').each(function () {
-		if ($(this).attr('href').substring(0, 4) !== "http") {
-			$(this).click(function () {
+	history.replaceState([window.location.pathname, $('.active').find('a').attr('href')], "", window.location.pathname + window.location.search);
+	check($('a[href]').not('.autoexempt'));
+	window.onpopstate = function (event) {
+		if (event.state[0] != null) {
+			var url = "/"+(event.state[0] === "/" ? "content/" : "content/" + event.state[0]);
+			$.get(url, function (data) {
+				if (data.split(/\r\n|\r|\n/).length == 1) {
+					document.location = data;
+					return;
+				}
+				document.title = data.substring(0, data.indexOf('\n'));
+				var content=$('#content');
+				content.html(data.substr(data.indexOf('\n')));
+				check(content.find('a[href]').not('.autoexempt'));
+				$('li').removeClass('active');
+				if (event.state[1] != null) {
+					$('#menu').find('a[href="' + event.state[1] + '"]').parent().addClass('active');
+				}
+			}).fail(function (jqXHR) {
+				fail(jqXHR, event.state[0]);
+			});
+		}
+	}
+});
+function check(target) {
+	target.each(function () {
+		$(this).click(function () {
+			if ($(this).attr('href').substring(0, 4) !== "http") {
 				var link = $(this);
-				var url = $(this).attr("href") === "/" ? "/content/" : "/content/" + $(this).attr("href");
-				$.get(url, function (data) {
-					if(data.split(/\r\n|\r|\n/).length==1){
-						document.location=data;
+				if(link.hasClass('autoexempt')) return;
+				$.get("/"+($(this).attr("href") === "/" ? "content/" : "content/" + $(this).attr("href")), function (data) {
+					if (data.split(/\r\n|\r|\n/).length == 1) {
+						document.location = data;
 						return;
 					}
 					$('li').removeClass('active');
@@ -19,63 +43,20 @@ $(document).ready(function () {
 							li.parent().addClass('active');
 						}
 					}
-					history.pushState([link.attr('href'), $('.active').find('a').attr('href')], document.title, link.attr('href'));
+					history.pushState([link.attr("href"), $('.active').find('a').attr('href')], "", link.attr("href"));
 					document.title = data.substring(0, data.indexOf('\n'));
-					$('#content').html(data.substr(data.indexOf('\n')));
-					check();
-				}).fail(function(jqXHR){
-					fail(jqXHR,link.attr('href'));
+					var content=$('#content');
+					content.html(data.substr(data.indexOf('\n')));
+					check(content.find('a[href]').not('.autoexempt'));
+				}).fail(function (jqXHR) {
+					fail(jqXHR, link.attr('href'));
 				});
 				return false;
-			});
-		}
-	});
-	window.onpopstate = function (event) {
-		if (event.state[0] != null) {
-			var url = event.state[0] === "/" ? "content/" : "content/" + event.state[0];
-			$.get(url, function (data) {
-				if(data.split(/\r\n|\r|\n/).length==1){
-					document.location=data;
-					return;
-				}
-				document.title = data.substring(0, data.indexOf('\n'));
-				$('#content').html(data.substr(data.indexOf('\n')));
-				check();
-				$('li').removeClass('active');
-				if (event.state[1] != null) {
-					$('#menu').find('a[href="' + event.state[1] + '"]').parent().addClass('active');
-				}
-			}).fail(function(jqXHR){
-				fail(jqXHR,event.state[0]);
-			});
-		}
-	}
-});
-function check() {
-	$('#content').find('a[href]').not('.autoexempt').each(function () {
-		if ($(this).attr('href').substring(0, 4) !== "http") {
-			$(this).click(function () {
-				var link = $(this);
-				$.get($(this).attr("href") === "/" ? "content/" : "content/" + $(this).attr("href"), function (data) {
-					document.title = data.substring(0, data.indexOf('\n'));
-					$('#content').html(data.substr(data.indexOf('\n')));
-					$('li').removeClass('active');
-					if (link.parent().prop('nodeName') === "LI") {
-						link.parent().addClass('active');
-					} else {
-						var li = $('#menu').find('a[href="' + link.attr('href') + '"]');
-						if (li !== null) {
-							li.parent().addClass('active');
-						}
-					}
-					history.pushState([link.attr("href"), $('.active').find('a').attr('href')], "title", link.attr("href"));
-				});
-				return false;
-			});
-		}
+			}
+		});
 	});
 }
-function fail(jqXHR,url) {
+function fail(jqXHR, url) {
 	var status = jqXHR.status;
 	var codes = [];
 	codes[200] = ['404 Not Found', 'Uh oh! Your page was not found.'];

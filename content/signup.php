@@ -83,12 +83,14 @@ if ($error['password'] || $error['username'] || $error['email']) {
 			$conn->real_escape_string(password_hash($password, PASSWORD_DEFAULT)),
 			$conn->real_escape_string($email));
 		$conn->query($query);
-		$query = sprintf("SELECT id,perm FROM users WHERE username = '%s'",
+		$query = sprintf("SELECT id,perm,username,email FROM users WHERE username = '%s'",
 			$conn->real_escape_string($username));
 		$result = $conn->query($query);
 		$data = $result->fetch_assoc();
 		$_SESSION['auth'] = $data['perm'];
 		$_SESSION['uid'] = $data['id'];
+		$_SESSION['un'] = $data['username'];
+		$_SESSION['email'] = $data['email'];
 		if ($useJSON) {
 			echo json_encode([
 				"success" => true,
@@ -196,7 +198,7 @@ if ($error['password'] || $error['username'] || $error['email']) {
 				}
 			},
 			submitHandler: function (form) {
-				$.post($(form).attr('action'), $(form).serialize() + "&from=jquery", function (data, test, test2) {
+				$.post($(form).attr('action'), $(form).serialize() + "&from=jquery", function (data) {
 					var jData = JSON.parse(data);
 					if (jData['success'] === true) {
 						window.location = jData['redirect'];

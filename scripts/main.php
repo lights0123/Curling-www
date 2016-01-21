@@ -89,8 +89,14 @@ EOF;
 
 function footer()
 {
+	$year = date("Y");
+	if($year > COPYRIGHT_YEAR){
+		$string=COPYRIGHT_YEAR." - " . $year;
+	}else{
+		$string=COPYRIGHT_YEAR;
+	}
 	echo <<<EOF
-<p>Copyright © 2015 Ben Schattinger. Some rights reserved by the <a href="/license">license</a>.</p>
+<p>Copyright © $string Ben Schattinger. Some rights reserved by the <a href="/license">license</a>.</p>
 <p><a href="/tos">Terms of Service</a> | <a href="/privacy">Privacy Policy</a></p>
 EOF;
 
@@ -151,4 +157,14 @@ function createBox($type,$message){
 	<div class="notice errorbox"><p><?php echo htmlspecialchars($message)?></p></div>
 		<?php
 	}
+}
+
+function gotopage($loc)
+{
+	if($_GET['from']==="jquery"){
+		echo $loc;
+	}else{
+    	header("Location: " . $loc);
+	}
+    exit;
 }

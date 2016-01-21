@@ -75,6 +75,17 @@ while ($go) {
 
 					var eve = draw.foreignObject(30, cellHeight * 2).move(xPos, current);
 					var child = eve.appendChild("a", {});
+					$(child.node['childNodes'][0]).attr('href', '/event/' + key.toString()).addClass('autoexempt');
+					console.log(child.node['childNodes'][0]);
+					$(child.node['childNodes'][0]).click(function (e) {
+						var url = $(this).attr('href');
+						$.get(url, function (data) {
+
+						}).fail(function (jqXHR) {
+
+						});
+						return false;
+					});
 					$(child.node['childNodes'][0]).append($("<div>")).children().text(key.toString()).addClass("EventNumber");
 					$(eve.appendChild("div").node['childNodes'][1])
 						.addClass("EventNumberBorder");
@@ -88,8 +99,8 @@ while ($go) {
 						}
 						draw.rect(cellWidth, cellHeight).fill(color).move(xPos + 30, current);
 
-						var fobj = draw.foreignObject(cellWidth, cellHeight + 1).move(xPos + 30, current).
-						appendChild("a", {});
+						var fobj = draw.foreignObject(cellWidth, cellHeight + 1).move(xPos + 30, current).appendChild("a", {});
+						$(fobj.node['childNodes'][0]).addClass('autoexempt');
 						$(fobj.node['childNodes'][0]).append($('<div>')).children().text(value['team' + (j.toString())]);
 						if ((key * 2 + (j - 1)) % 2 == 0) {
 							$(fobj.appendChild('div').node['childNodes'][1]).addClass("borderTeam")

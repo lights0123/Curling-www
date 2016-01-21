@@ -4,6 +4,7 @@ global $functions;
 $functions=[];
 include 'template.php';
 include 'contentGlobals/contentGlobals.php';
+$_GET['from']="html";
 foreach (glob("contentGlobals/*.php") as $filename)
 {
 	if(!endsWith($filename,'contentGlobals')){

@@ -9,6 +9,7 @@ addHandler('content',function($opage,$rawpage) {
 	$page = realpath($opage);
 	if ($page) {
 		if (startsWith($page, DOCUMENT_ROOT . "/content")) {
+			$_GET['from']="jquery";
 			include($page);
 			exit;
 		}
@@ -16,6 +17,7 @@ addHandler('content',function($opage,$rawpage) {
 		$page = realpath($opage . ".php");
 		if ($page) {
 			if (startsWith($page, DOCUMENT_ROOT . "/content")) {
+				$_GET['from']="jquery";
 				include($page);
 				exit;
 			}

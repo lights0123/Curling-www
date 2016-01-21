@@ -14,3 +14,5 @@ define("USES_HTTPS", (
 define("DOMAIN_NAME", $_SERVER['SERVER_NAME']);
 
 define("BOX_CREATE_ERROR",0);
+
+define("COPYRIGHT_YEAR",2015);
